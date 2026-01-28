@@ -1,0 +1,53 @@
+@startuml
+title レストランシステム - シーケンス図（データ生成と表示）
+
+actor ユーザー as User
+participant "index.php" as Index
+participant "RestaurantChain" as Chain
+participant "RestaurantLocation" as Location
+participant "Employee" as Employee
+participant "FileConvertible" as Interface
+
+User -> Index : ページアクセス
+activate Index
+
+Index -> Chain : new RestaurantChain()
+activate Chain
+Chain -> Chain : ランダムデータ生成
+return RestaurantChainオブジェクト
+
+Index -> Chain : addLocation()
+activate Chain
+Chain -> Location : new RestaurantLocation()
+activate Location
+Location -> Location : ランダムデータ生成
+return RestaurantLocationオブジェクト
+Chain -> Chain : locationを追加
+return void
+
+Index -> Location : addEmployee()
+activate Location
+Location -> Employee : new Employee()
+activate Employee
+Employee -> Employee : ランダムデータ生成
+return Employeeオブジェクト
+Location -> Location : employeeを追加
+return void
+
+Index -> Chain : toHTML()
+activate Chain
+Chain -> Interface : toHTML()
+activate Interface
+Interface -> Location : toHTML()
+activate Location
+Location -> Employee : toHTML()
+activate Employee
+return HTML文字列
+return HTML文字列
+return HTML文字列
+return HTML文字列
+
+Index -> User : HTML表示
+deactivate Index
+
+@enduml

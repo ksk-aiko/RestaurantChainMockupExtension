@@ -1,0 +1,40 @@
+@startuml
+title レストランシステム - ユースケース図
+
+left to right direction
+
+actor "システム管理者" as Admin
+actor "閲覧者" as Viewer
+
+rectangle "レストランチェーン管理システム" {
+  usecase "レストランチェーンを生成" as UC1
+  usecase "レストラン店舗を追加" as UC2
+  usecase "従業員を登録" as UC3
+  usecase "データをHTML形式で表示" as UC4
+  usecase "データをMarkdown形式で出力" as UC5
+  usecase "データを配列形式で取得" as UC6
+  usecase "ランダムデータを生成" as UC7
+  usecase "企業情報を管理" as UC8
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC7
+Admin --> UC8
+
+Viewer --> UC4
+Viewer --> UC5
+Viewer --> UC6
+
+UC1 ..> UC7 : <<include>>
+UC2 ..> UC7 : <<include>>
+UC3 ..> UC7 : <<include>>
+
+UC1 ..> UC8 : <<extend>>
+
+UC4 ..> UC1 : <<include>>
+UC5 ..> UC1 : <<include>>
+UC6 ..> UC1 : <<include>>
+
+@enduml

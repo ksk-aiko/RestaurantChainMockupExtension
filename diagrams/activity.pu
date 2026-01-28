@@ -1,0 +1,55 @@
+@startuml
+title レストランシステム - アクティビティ図（システム初期化フロー）
+
+start
+
+:ページロード;
+
+:RestaurantChainオブジェクト生成;
+:ランダムな企業名・設立年・説明を生成;
+
+:店舗数を決定（ランダム）;
+
+repeat
+  :RestaurantLocationオブジェクト生成;
+  :ランダムな店舗名・住所・評価を生成;
+  
+  :従業員数を決定（ランダム）;
+  
+  repeat
+    :Employeeオブジェクト生成;
+    :ランダムな従業員情報を生成;
+    note right
+      - 名前
+      - 年齢
+      - 住所
+      - 役職
+      - 給与
+    end note
+    :従業員を店舗に追加;
+  repeat while (従業員追加完了?) is (いいえ)
+  
+  :店舗をチェーンに追加;
+repeat while (店舗追加完了?) is (いいえ)
+
+:データ形式を選択;
+
+if (形式は?) then (HTML)
+  :toHTML()を実行;
+  :HTML形式で出力;
+elseif (Markdown) then
+  :toMarkdown()を実行;
+  :Markdown形式で出力;
+elseif (配列) then
+  :toArray()を実行;
+  :配列形式で出力;
+else (文字列)
+  :toString()を実行;
+  :文字列形式で出力;
+endif
+
+:ブラウザに表示;
+
+stop
+
+@enduml

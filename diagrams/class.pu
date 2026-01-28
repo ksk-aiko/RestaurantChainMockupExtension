@@ -1,0 +1,100 @@
+@startuml RestaurantSystemClassDiagram
+interface FileConvertible {
+  +toString(): string
+  +toHTML(): string
+  +toMarkdown(): string
+  +toArray(): array
+}
+
+class User {
+  +id: int
+  +firstName: string
+  +lastName: string
+  +email: string
+  +hashedPassword: string
+  +phoneNumber: string
+  +address: string
+  +birthDate: DateTime
+  +membershipExpirationDate: DateTime
+  +role: string
+  --
+  +__construct()
+  +login(password: string): bool
+  +updateProfile(address: string, phoneNumber: string): void
+  +renewMembership(expirationDate: DateTime): void
+  +changePassword(newPassword: string): void
+  +hasMembershipExpired(): bool
+  +toString(): string
+  +toHTML(): string
+  +toMarkdown(): string
+  +toArray(): array
+}
+
+class Employee {
+  +jobTitle: string
+  +salary: float
+  +startDate: DateTime
+  +awards: array
+  --
+  +__construct()
+  +{static} RandomGenerator(): self
+  +toHTML(): string
+}
+
+class Company {
+  +name: string
+  +foundingYear: int
+  +description: string
+  +website: string
+  +phone: string
+  +industry: string
+  +ceo: string
+  +isPubliclyTraded: bool
+  +country: string
+  +founder: string
+  +totalEmployees: int
+  --
+  +toHTML(): string
+  +toString(): string
+  +toMarkdown(): string
+  +toArray(): array
+}
+
+class RestaurantLocation {
+  +name: string
+  +address: string
+  +city: string
+  +state: string
+  +zipCode: string
+  +employees: array
+  +isOpen: bool
+  --
+  +__construct()
+  +toHTML(): string
+  +toString(): string
+  +toMarkdown(): string
+  +toArray(): array
+}
+
+class RestaurantChain {
+  +chainId: int
+  +restaurantLocations: array
+  +cuisineType: string
+  +numberOfLocations: int
+  +hasDriveThru: bool
+  +yearFounded: int
+  +parentCompany: string
+  --
+  +{static} RandomGenerator(): self
+  +toHTML(): string
+}
+
+User ..|> FileConvertible
+Employee --|> User
+Employee ..|> FileConvertible
+Company ..|> FileConvertible
+RestaurantChain --|> Company
+RestaurantChain ..|> FileConvertible
+RestaurantChain "1" *-- "many" RestaurantLocation
+RestaurantLocation "1" *-- "many" Employee
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+title レストランシステム - コンポーネント図
+
+package "Web Layer" {
+  [index.php] as Web
+}
+
+package "Domain Layer" {
+  [User Class] as User
+  [Employee Class] as Employee
+  [Company Class] as Company
+  [RestaurantLocation Class] as Location
+  [RestaurantChain Class] as Chain
+}
+
+package "Interface Layer" {
+  [FileConvertible Interface] as Interface
+}
+
+package "Data Generator" {
+  [Random Data Generator] as Generator
+}
+
+package "Output Formatters" {
+  [HTML Formatter] as HTML
+  [Markdown Formatter] as Markdown
+  [Array Formatter] as Array
+}
+
+Web --> Chain : 生成・表示
+Web --> Generator : データ生成依頼
+
+Chain --> Location : 管理
+Location --> Employee : 管理
+Employee --|> User : 継承
+
+User ..|> Interface : 実装
+Employee ..|> Interface : 実装
+Company ..|> Interface : 実装
+Chain ..|> Interface : 実装
+
+Interface --> HTML : 変換
+Interface --> Markdown : 変換
+Interface --> Array : 変換
+
+Generator --> Chain : ランダムデータ生成
+
+@enduml
