@@ -6,9 +6,18 @@ require_once __DIR__ . '/../Helpers/RandomGenerator.php';
 $count = $_POST['count'] ?? 5;
 $format = $_POST['format'] ?? 'html';
 
-// if you want to use raw post data, uncomment the following lines
-// $rawPostData = file_get_contents('php://input');
-// echo $rawPostData;
+if ( is_null($count) || is_null($format)) {
+    exit('Missing parameters');
+} 
+
+if (is_numeric($count) || $cont < 1 || $count > 100) {
+    exti('Invald count. Must be a numcer between 1 and 100.');
+}
+
+$allowedFormats = ['json', 'txt', 'html', 'md'];
+if (!in_array($format, $allowedFormats)) {
+    exit('Invalid type. Must be one of: ' . implode(', ', $allowedFormats));
+}
 
 $count = (int) $count;
 
@@ -39,4 +48,8 @@ if ($format === 'markdown') {
     foreach ($users as $user) {
         echo $user->toHTML();
     }
+
+    // if you want to use raw post data, uncomment the following lines
+    // $rawPostData = file_get_contents('php://input');
+    // echo $rawPostData;
 }
