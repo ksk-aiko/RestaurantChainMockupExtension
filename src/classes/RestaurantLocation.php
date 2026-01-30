@@ -11,8 +11,9 @@ class RestaurantLocation implements FileConvertible {
     public array $employees;
     public bool $isOpen;
 
-    public function __construct() {
-        $data = RandomGenerator::restaurantLocation();
+    // Modify constructor to accept zip code range and employee salary range
+    public function __construct(int $minZip = 10000, int $maxZip = 99999, int $minSalary = 30000, int $maxSalary = 80000, int $employeeCount = 3) {
+        $data = RandomGenerator::restaurantLocation($minZip, $maxZip);
         $this->name = $data['name'];
         $this->address = $data['address'];
         $this->city = $data['city'];
@@ -21,10 +22,9 @@ class RestaurantLocation implements FileConvertible {
         $this->isOpen = $data['isOpen'];
         
         // Generate a random number of employees (2-5) and add them to the array to recreate the restaurant employees
-        $employeeCount = rand(2, 5);
         $this->employees = [];
         for ($i = 0; $i < $employeeCount; $i++) {
-            $this->employees[] = new Employee();
+            $this->employees[] = new Employee($minSalary, $maxSalary);
         }
     }
 

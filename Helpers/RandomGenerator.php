@@ -29,11 +29,12 @@ class RandomGenerator {
         ];
     }
 
-    public static function employee(): array {
+    public static function employee(int $minSalary = 30000, int $maxSalary = 80000): array {
         $faker = self::getFaker();
         return [
             'jobTitle' => $faker->randomElement(self::$jobTitles),
-            'salary' => $faker->numberBetween(30000, 80000),
+            // Add argument to allow user to set salary
+            'salary' => $faker->numberBetween($minSalary, $maxSalary),
             'startDate' => new DateTime($faker->dateTimeBetween('-10 years', 'now')->format('Y-m-d')),
             'awards' => $faker->boolean(30) ? [$faker->randomElement(self::$awards)] : []
         ];
@@ -56,7 +57,7 @@ class RandomGenerator {
         ];
     }
 
-    public static function restaurantLocation(): array {
+    public static function restaurantLocation(int $minZip = 10000, int $maxZip = 99999): array {
         $faker = self::getFaker();
         $city = $faker->city();
         return [
@@ -64,7 +65,8 @@ class RandomGenerator {
             'address' => $faker->streetAddress(),
             'city' => $city,
             'state' => $faker->state(),
-            'zipCode' => $faker->postcode(),
+            // Add argument to allow user to set zip code range
+            'zipCode' => $faker->numberBetween($minZip, $maxZip),
             'isOpen' => $faker->boolean(90)
         ];
     }

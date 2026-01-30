@@ -10,9 +10,9 @@ class Employee extends User {
     public DateTime $startDate;
     public array $awards;
 
-    public function __construct() {
+    public function __construct(int $minSalary = 30000, int $maxSalary = 80000) {
         parent::__construct();
-        $data = RandomGenerator::employee();
+        $data = RandomGenerator::employee($minSalary, $maxSalary);
         $this->jobTitle = $data['jobTitle'];
         $this->salary = $data['salary'];
         $this->startDate = $data['startDate'];

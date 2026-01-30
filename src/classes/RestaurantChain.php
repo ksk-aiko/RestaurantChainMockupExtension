@@ -12,21 +12,21 @@ class RestaurantChain extends Company {
     public int $yearFounded;
     public string $parentCompany;
 
-    public function __construct() {
+    // Modify constructor to accept number of locations, employee salary range, and zip code range
+    public function __construct(int $numberOfLocations = 5, int $minSalary = 30000, int $maxSalary = 80000, int $minZip = 10000, int $maxZip = 99999, int $employeeCount = 3) {
         parent::__construct();
         $data = RandomGenerator::restaurantChain();
         $this->chainId = $data['chainId'];
         $this->cuisineType = $data['cuisineType'];
-        $this->numberOfLocations = $data['numberOfLocations'];
+        $this->numberOfLocations = $numberOfLocations;
         $this->hasDriveThru = $data['hasDriveThru'];
         $this->yearFounded = $data['yearFounded'];
         $this->parentCompany = $data['parentCompany'];
         
         // Generate a random number of restaurants (2-5) and add them to the array to recreate the restaurant chain
-        $locationCount = rand(2, 5);
         $this->restaurantLocations = [];
-        for ($i = 0; $i < $locationCount; $i++) {
-            $this->restaurantLocations[] = new RestaurantLocation();
+        for ($i = 0; $i < $numberOfLocations; $i++) {
+            $this->restaurantLocations[] = new RestaurantLocation($minZip, $maxZip, $minSalary, $maxSalary, $employeeCount);
         }
     }
 
