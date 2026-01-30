@@ -11,7 +11,7 @@ if ( is_null($count) || is_null($format)) {
 } 
 
 if (is_numeric($count) || $cont < 1 || $count > 100) {
-    exti('Invald count. Must be a numcer between 1 and 100.');
+    exit('Invald count. Must be a numcer between 1 and 100.');
 }
 
 $allowedFormats = ['json', 'txt', 'html', 'md'];
