@@ -1,55 +1,72 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/classes/User.php';
-require_once __DIR__ . '/../Helpers/RandomGenerator.php';
+require_once __DIR__ . '/classes/RestaurantChain.php';
 
-$count = $_POST['count'] ?? 5;
+// Processes other than POST requests, such as redirects, are required, but are handled simply here.
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    exit('Invalid Request');
+}
+
+// Get parameters and typecast
+$numberOfLocations = (int)($_POST['numberOfLocations'] ?? 5);
+
+$zipCodeMin = (int)($_POST['zipCodeMin'] ?? 10000);
+$zipCodeMax = (int)($_POST['zipCodeMax'] ?? 99999);
+$employeeCount = (int)($_POST['employeeCount'] ?? 3);
+$salaryMin = (int)($_POST['salaryMin'] ?? 30000);
+$salaryMax = (int)($_POST['salaryMax'] ?? 80000);
 $format = $_POST['format'] ?? 'html';
 
-if ( is_null($count) || is_null($format)) {
-    exit('Missing parameters');
-} 
+// Validation (simplified)
+if ($numberOfLocations < 1 || $numberOfLocations > 50) exit('Invalid number of locations');
+if ($employeeCount < 1 || $employeeCount > 20) exit('Invalid employee count');
 
-if (is_numeric($count) || $cont < 1 || $count > 100) {
-    exit('Invald count. Must be a numcer between 1 and 100.');
-}
+// Generate restaurant chain
+// pass values according to the order of the class constructor arguments
+// RestaurantChain(numOfLocs, minSal, maxSal, minZip, maxZip, empCount)
+$chain = new RestaurantChain(
+    $numberOfLocations,
+    $salaryMin,
+    $salaryMax,
+    $zipCodeMin,
+    $zipCodeMax,
+    $employeeCount
+);
 
-$allowedFormats = ['json', 'txt', 'html', 'md'];
-if (!in_array($format, $allowedFormats)) {
-    exit('Invalid type. Must be one of: ' . implode(', ', $allowedFormats));
-}
-
-$count = (int) $count;
-
-$users =[];
-for ($i = 0; $i < $count; $i++) {
-    $users[] = new User();
-}
-
+// Output according to format
 if ($format === 'markdown') {
     header('Content-Type: text/markdown');
-    header('Content-Disposition: attachment; filename="users.md');
-    foreach ($users as $user) {
-        echo $user->toMarkdown();
-    }
+    header('Content-Disposition: attachment; filename="chain_data.md"');
+    echo $chain->toMarkdown();
 } elseif ($format === 'json') {
     header('Content-Type: application/json');
-    header('Content-Disposition: attachment; filename="users.json"');
-    $userArray = array_map(fn($user) => $user->toArray(), $users);
-    echo json_encode($userArray);
+    header('Content-Disposition: attachment; filename="chain_data.json"');
+    // convert the result of toArray() to JSON
+    echo json_encode($chain->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 } elseif ($format === 'txt') {
     header('Content-Type: text/plain');
-    header('Content-Disposition: attachment; filename="users.txt"');
-    foreach ($users as $user) {
-        echo $user->toString();
-    }
+    header('Content-Disposition: attachment; filename="chain_data.txt"');
+    echo $chain->toString();
 } else {
-    header('Content-Type: text/html');
-    foreach ($users as $user) {
-        echo $user->toHTML();
-    }
-
-    // if you want to use raw post data, uncomment the following lines
-    // $rawPostData = file_get_contents('php://input');
-    // echo $rawPostData;
+    // HTML output
+    // uncomment out if you want the file to be downloaded
+    // header('Content-Disposition: attachment; filename="chain_data.html"');
+    ?>
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Restaurant Chain Data</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+        <div class="container py-5">
+            <div class="mb-3">
+                <a href="generate_chain.php" class="btn btn-secondary">&laquo; 戻る</a>
+            </div>
+            <?= $chain->toHTML() ?>
+        </div>
+    </body>
+    </html>
+    <?php
 }
