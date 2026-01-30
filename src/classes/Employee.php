@@ -21,7 +21,19 @@ class Employee extends User {
 
     public function toHTML(): string {
         $name = $this->getFullName();
-        return "<li>{$this->jobTitle} - {$name}</li>";
+        $startDate = $this->getStartDateFormatted('Y-m-d');
+        $awardsCount = count($this->awards);
+
+        return "<li class='list-group-item'>" .
+               "<div class='d-flex justify-content-between align-items-start'>" .
+               "<div class='ms-2 me-auto'>" .
+               "<div class='fw-bold'>{$name}</div>" .
+               "<small class='text-muted'>{$this->jobTitle}</small>" .
+               "</div>" .
+               "<span class='badge bg-secondary rounded-pill'>\${$this->salary}</span>" .
+               "</div>" .
+               "<small class='text-muted'>Started: {$startDate} | Awards: {$awardsCount}</small>" .
+               "</li>";
     }
 
     public function getFullName(): string {
